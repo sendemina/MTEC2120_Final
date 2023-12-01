@@ -46,13 +46,16 @@ public class Interactor : MonoBehaviour
         direction = transform.TransformDirection(Vector3.forward);
         RaycastHit hit;
 
-        if(interactableTarget) { Debug.Log(interactableTarget.name);  }
+        if(interactableTarget)
+        {
+            //Debug.Log(interactableTarget.name);
+        }
 
         if (Physics.Raycast(transform.position, direction, out hit, maxInteractingDistance, layerMask))
         {
             if(hit.transform.TryGetComponent<Interactable>(out interactableTarget))
             {
-                Debug.Log("set target to " + interactableTarget.name);
+                //Debug.Log("set target to " + interactableTarget.name);
             }
         }
         else

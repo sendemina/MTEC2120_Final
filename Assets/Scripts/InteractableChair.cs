@@ -28,5 +28,7 @@ public class InteractableChair : Interactable
 
         playerAnimator = interactor.gameObject.GetComponent<Animator>();
         playerAnimator.SetTrigger("sitDown");
+
+        Debug.Log(interactor.name + " interacted with chair");
     }
 }
