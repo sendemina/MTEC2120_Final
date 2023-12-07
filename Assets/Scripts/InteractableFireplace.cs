@@ -7,6 +7,9 @@ public class InteractableFireplace : Interactable
     Transform playerTransform;
     Animator playerAnimator;
 
+    [SerializeField] GameObject fire;
+    public bool fireIsLit;
+
     [SerializeField] Transform marker;
 
     void Start()
@@ -16,7 +19,7 @@ public class InteractableFireplace : Interactable
 
     void Update()
     {
-        
+        fire.SetActive(fireIsLit);
     }
 
     public override void Interact(Interactor interactor)
@@ -28,8 +31,9 @@ public class InteractableFireplace : Interactable
         playerAnimator = interactor.gameObject.GetComponent<Animator>();
         playerAnimator.SetTrigger("lightFire");
 
-
         Debug.Log(interactor.name + " interacted with fireplace");
-
     }
+
+
+
 }

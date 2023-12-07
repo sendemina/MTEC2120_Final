@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InteractableGoat : Interactable
 {
+    Animator goatAnimator;
     Transform playerTransform;
     Animator playerAnimator;
 
@@ -11,8 +12,13 @@ public class InteractableGoat : Interactable
 
     private IEnumerator coroutine;
 
+    bool isPetting;
+    float petTime = 3f;
+    float timeSinceLastAttack;
+
     void Start()
     {
+        goatAnimator = GetComponent<Animator>();
     }
 
     void Update()
@@ -31,5 +37,6 @@ public class InteractableGoat : Interactable
         //playerAnimator.SetTrigger("petGoat");
 
         Debug.Log(interactor.name + " interacted with goat");
+        goatAnimator.SetTrigger("isPet");
     }
 }

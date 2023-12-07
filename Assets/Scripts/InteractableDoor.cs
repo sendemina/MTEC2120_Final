@@ -7,7 +7,7 @@ public class InteractableDoor : Interactable
     Transform playerTransform;
     Animator playerAnimator;
 
-    [SerializeField] Transform marker;
+    //[SerializeField] Transform marker;
     Transform hinge;
 
     private IEnumerator coroutine;
@@ -26,8 +26,8 @@ public class InteractableDoor : Interactable
     {
         playerTransform = interactor.gameObject.GetComponent<Transform>();
 
-        playerTransform.position = marker.position;
-        playerTransform.rotation = marker.rotation;
+        //playerTransform.position = marker.position;
+        //playerTransform.rotation = marker.rotation;
 
         playerAnimator = interactor.gameObject.GetComponent<Animator>();
         //playerAnimator.SetTrigger("openDoor");
@@ -39,13 +39,17 @@ public class InteractableDoor : Interactable
 
     IEnumerator OpenDoor()
     {
-        Debug.Log(hinge.rotation.eulerAngles.y);
-        while(hinge.rotation.eulerAngles.y > 270 || hinge.rotation.eulerAngles.y == 0)
-        {
-            Debug.Log(hinge.rotation.eulerAngles.y);
-            hinge.Rotate(Vector3.up, -1);
+        //Debug.Log(hinge.rotation.eulerAngles.y);
+        for(int i = 0; i < 90; i++)
+        { 
+            hinge.Rotate(Vector3.forward, -1);
             yield return new WaitForSeconds(0.01f);
         }
+        //while(hinge.rotation.eulerAngles.y > 270 || hinge.rotation.eulerAngles.y == 0)
+        //{
+        //    Debug.Log(hinge.rotation.eulerAngles.y);
+        //    hinge.Rotate(Vector3.up, -1);
+        //}
         //Debug.Log(hinge.rotation.eulerAngles.y);
 
         StartCoroutine(CloseDoor());
@@ -53,12 +57,17 @@ public class InteractableDoor : Interactable
 
     IEnumerator CloseDoor()
     {
-        while (hinge.rotation.eulerAngles.y < 359)
+        for (int i = 0; i < 90; i++)
         {
-            Debug.Log(hinge.rotation.eulerAngles.y);
-            hinge.Rotate(Vector3.up, 1);
+            hinge.Rotate(Vector3.forward, 1);
             yield return new WaitForSeconds(0.01f);
         }
+        //while (hinge.rotation.eulerAngles.y < 359)
+        //{
+        //    Debug.Log(hinge.rotation.eulerAngles.y);
+        //    hinge.Rotate(Vector3.up, 1);
+        //    yield return new WaitForSeconds(0.01f);
+        //}
         Debug.Log("door ended");
     }
 }

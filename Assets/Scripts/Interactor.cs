@@ -7,8 +7,10 @@ public class Interactor : MonoBehaviour
 {
     [SerializeField] InputActionReference interactAction;
     [SerializeField] float maxInteractingDistance = 10f;
+    PlayerStats stats;
     LayerMask layerMask;
     public Interactable interactableTarget;
+
 
     Vector3 direction;
 
@@ -24,6 +26,8 @@ public class Interactor : MonoBehaviour
 
     void Start()
     {
+        stats = gameObject.GetComponent<PlayerStats>();
+
         layerMask = LayerMask.GetMask("Interactable");
 
         interactAction.action.performed += context =>
@@ -55,7 +59,7 @@ public class Interactor : MonoBehaviour
         {
             if(hit.transform.TryGetComponent<Interactable>(out interactableTarget))
             {
-                //Debug.Log("set target to " + interactableTarget.name);
+                Debug.Log("set target to " + interactableTarget.name);
             }
         }
         else
@@ -65,5 +69,23 @@ public class Interactor : MonoBehaviour
                 //interactableTarget = null; //MAKE IT STICK!!!!
             }
         }    
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        int LayerDanger = LayerMask.NameToLayer("Danger");
+        if (other.gameObject.layer == LayerDanger)
+        {
+            stats.ReceiveDamage(1);
+        }
+    }
+
+    public void ToggleFire()
+    {
+        if (interactableTarget.name == "Fireplace")
+        {
+            InteractableFireplace fireplace = (InteractableFireplace)interactableTarget;
+            fireplace.fireIsLit = !fireplace.fireIsLit;
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerControls inputActions;
     private InputAction movement;
+    private InputAction attack;
+    private Animator playerAnimator;
 
     private Rigidbody rb;
 
@@ -18,11 +21,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Camera playerCamera;
 
+    bool isAttacking;
+    float attackTime = 3f;
+    float timeSinceLastAttack;
+
 
     private void Awake()
     {
         inputActions = new PlayerControls();
         rb = GetComponent<Rigidbody>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -32,6 +40,10 @@ public class PlayerController : MonoBehaviour
 
         inputActions.Player.Jump.started += OnJump;
         inputActions.Player.Jump.Enable();
+
+        attack = inputActions.Player.Shoot;
+        attack.started += OnShoot;
+        attack.Enable();
     }
 
     private void FixedUpdate()
@@ -49,6 +61,15 @@ public class PlayerController : MonoBehaviour
 
         LimitSpeed();
         FaceTowards();
+
+        timeSinceLastAttack += Time.deltaTime;
+        if(timeSinceLastAttack >= attackTime)
+        {
+            isAttacking = false;
+            timeSinceLastAttack = 0f;
+        }
+        playerAnimator.SetBool("attackReady", isAttacking);
+
     }
 
     private void LimitSpeed()
@@ -69,10 +90,12 @@ public class PlayerController : MonoBehaviour
         if (movement.ReadValue<Vector2>().sqrMagnitude > 0.1f && direction.sqrMagnitude > 0.1f)
         {
             rb.rotation = Quaternion.LookRotation(direction, Vector3.up);
+            playerAnimator.SetBool("walking", true);
         }
         else
         {
             rb.angularVelocity = Vector3.zero;
+            playerAnimator.SetBool("walking", false);
         }
     }
 
@@ -98,11 +121,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnShoot(InputAction.CallbackContext context)
+    {
+        isAttacking = true;
+        timeSinceLastAttack = 0f;
+    }
+
     private bool IsGrounded()
     {
         Ray ray = new Ray(this.transform.position, Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, 1.5f)) { return true; }
         else { return false; }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Indoors"))
+        {
+            other.gameObject.transform.Find("walls").gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Indoors"))
+        {
+            other.gameObject.transform.Find("walls").gameObject.SetActive(true);
+        }
     }
 
     private void OnDisable()
