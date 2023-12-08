@@ -9,6 +9,7 @@ public class InteractableDoor : Interactable
 
     //[SerializeField] Transform marker;
     Transform hinge;
+    bool doorOpen;
 
     private IEnumerator coroutine;
 
@@ -34,7 +35,14 @@ public class InteractableDoor : Interactable
 
         Debug.Log(interactor.name + " interacted with door");
 
-        StartCoroutine(OpenDoor());
+        if (doorOpen)
+        {
+            StartCoroutine(CloseDoor());
+        }
+        else
+        {
+            StartCoroutine(OpenDoor());
+        }
     }
 
     IEnumerator OpenDoor()
@@ -52,7 +60,6 @@ public class InteractableDoor : Interactable
         //}
         //Debug.Log(hinge.rotation.eulerAngles.y);
 
-        StartCoroutine(CloseDoor());
     }
 
     IEnumerator CloseDoor()

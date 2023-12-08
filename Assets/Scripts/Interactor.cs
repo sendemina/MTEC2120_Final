@@ -82,7 +82,8 @@ public class Interactor : MonoBehaviour
 
     public void ToggleFire()
     {
-        if (interactableTarget.name == "Fireplace")
+        Debug.Log("toggled fire");
+        if (interactableTarget.name == "chimney")
         {
             InteractableFireplace fireplace = (InteractableFireplace)interactableTarget;
             fireplace.fireIsLit = !fireplace.fireIsLit;

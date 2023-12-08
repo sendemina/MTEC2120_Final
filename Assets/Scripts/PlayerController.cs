@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private InputAction movement;
     private InputAction attack;
     private Animator playerAnimator;
+    private PlayerStats playerStats;
 
     private Rigidbody rb;
 
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
         inputActions = new PlayerControls();
         rb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     private void OnEnable()
@@ -91,11 +93,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.rotation = Quaternion.LookRotation(direction, Vector3.up);
             playerAnimator.SetBool("walking", true);
+            Debug.Log("walking is true");
         }
         else
         {
             rb.angularVelocity = Vector3.zero;
             playerAnimator.SetBool("walking", false);
+            Debug.Log("walking is false");
         }
     }
 
@@ -126,6 +130,7 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         timeSinceLastAttack = 0f;
+        playerStats.UseStamina(10);
     }
 
     private bool IsGrounded()
