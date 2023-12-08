@@ -8,6 +8,7 @@ public class GoatController : MonoBehaviour
     [SerializeField] float jumpForce = 5f;
     [SerializeField] float maxSpeed = 5f;
     Vector3 forceDirection = Vector3.zero;
+
     bool isMoving;
     bool isFollowing;
 
@@ -15,7 +16,7 @@ public class GoatController : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();    
+        rb = GetComponent<Rigidbody>();
     }
 
     

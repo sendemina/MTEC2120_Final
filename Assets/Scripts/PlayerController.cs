@@ -115,9 +115,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        if (IsGrounded())
+        if (!IsGrounded())
         {
             forceDirection += Vector3.up * jumpForce;
+            playerAnimator.SetTrigger("jump");
         }
     }
 
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         Ray ray = new Ray(this.transform.position, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1.5f)) { return true; }
+        if (Physics.Raycast(ray, out RaycastHit hit, 5f)) { return true; }
         else { return false; }
     }
 

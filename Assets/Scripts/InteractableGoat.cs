@@ -10,6 +10,8 @@ public class InteractableGoat : Interactable
 
     [SerializeField] Transform marker;
 
+    AudioSource audio;
+
     private IEnumerator coroutine;
 
     bool isPetting;
@@ -19,6 +21,7 @@ public class InteractableGoat : Interactable
     void Start()
     {
         goatAnimator = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -38,5 +41,6 @@ public class InteractableGoat : Interactable
 
         Debug.Log(interactor.name + " interacted with goat");
         goatAnimator.SetTrigger("isPet");
+        audio.Play();
     }
 }
