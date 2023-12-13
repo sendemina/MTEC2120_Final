@@ -6,7 +6,7 @@ public class InteractableGoat : Interactable
 {
     Animator goatAnimator;
     Transform playerTransform;
-    Animator playerAnimator;
+    [SerializeField] Animator playerAnimator;
 
     [SerializeField] Transform marker;
 
@@ -41,6 +41,7 @@ public class InteractableGoat : Interactable
 
         Debug.Log(interactor.name + " interacted with goat");
         goatAnimator.SetTrigger("isPet");
+        playerAnimator.SetTrigger("pet");
         audio.Play();
     }
 }

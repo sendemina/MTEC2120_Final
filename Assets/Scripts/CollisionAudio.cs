@@ -4,6 +4,7 @@ public class CollisionAudio : MonoBehaviour
 {
     public AudioClip collisionSound; // Assign your audio clip in the Unity inspector
     private AudioSource audioSource;
+    bool hasFallen;
 
     void Start()
     {
@@ -23,10 +24,11 @@ public class CollisionAudio : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         // Check if there's a collision and the AudioSource is not already playing
-        if (collisionSound != null && !audioSource.isPlaying)
+        if (collisionSound != null && !audioSource.isPlaying && !hasFallen)
         {
             // Play the collision sound
             audioSource.Play();
+            hasFallen = true;
         }
     }
 }

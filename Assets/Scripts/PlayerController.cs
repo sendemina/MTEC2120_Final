@@ -15,10 +15,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    [SerializeField] float moveForce = 0.01f;
-    [SerializeField] float jumpForce = 200f;
+    [SerializeField] float moveForce =1f;
+    [SerializeField] float jumpForce = 10f;
     [SerializeField] float maxSpeed = 5f;
     private Vector3 forceDirection = Vector3.zero;
+
 
     [SerializeField] private Camera playerCamera;
 
@@ -39,6 +40,10 @@ public class PlayerController : MonoBehaviour
     {
         movement = inputActions.Player.Move;
         movement.Enable();
+
+        inputActions.Player.Run.started += OnRun;
+        inputActions.Player.Run.canceled += OnStopRunning;
+        inputActions.Player.Run.Enable();
 
         inputActions.Player.Jump.started += OnJump;
         inputActions.Player.Jump.Enable();
@@ -84,6 +89,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnRun(InputAction.CallbackContext context)
+    {
+        Debug.Log("run");
+        playerAnimator.SetBool("run", true);
+        moveForce *= 2;
+        maxSpeed *= 3;
+    }
+
+    private void OnStopRunning(InputAction.CallbackContext context)
+    {
+        playerAnimator.SetBool("run", false);
+        moveForce /= 2;
+        maxSpeed /= 3;
+    }
+
     private void FaceTowards()
     {
         Vector3 direction = rb.velocity;
@@ -93,13 +113,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.rotation = Quaternion.LookRotation(direction, Vector3.up);
             playerAnimator.SetBool("walking", true);
-            Debug.Log("walking is true");
+            //Debug.Log("walking is true");
         }
         else
         {
             rb.angularVelocity = Vector3.zero;
             playerAnimator.SetBool("walking", false);
-            Debug.Log("walking is false");
+            //Debug.Log("walking is false");
         }
     }
 
@@ -130,7 +150,6 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         timeSinceLastAttack = 0f;
-        playerStats.UseStamina(10);
     }
 
     private bool IsGrounded()
@@ -161,6 +180,7 @@ public class PlayerController : MonoBehaviour
         movement.Disable();
         inputActions.Player.Jump.started -= OnJump;
         inputActions.Player.Disable();
+        inputActions.Player.Run.Disable();
     }
 
 

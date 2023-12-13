@@ -20,7 +20,7 @@ public class GoatController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         //rb = GetComponent<Rigidbody>();
-        layerMask = LayerMask.GetMask("Edible");
+        layerMask = LayerMask.NameToLayer("Edible");
     }
 
     

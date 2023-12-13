@@ -8,7 +8,9 @@ public class Bow : MonoBehaviour
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] Transform arrowRest;
     [SerializeField] float arrowForce = 2000f;
+    [SerializeField] GameObject player;
     private GameObject newArrow;
+    Animator playerAnimator;
 
     public InputActionReference shootAction;
 
@@ -24,6 +26,8 @@ public class Bow : MonoBehaviour
 
     void Start()
     {
+        playerAnimator = player.GetComponent<Animator>();
+
         shootAction.action.performed += context =>
         {
             Vector3 bowDirection = Camera.main.ScreenToWorldPoint
@@ -32,6 +36,8 @@ public class Bow : MonoBehaviour
             //arrowRest.LookAt(bowDirection
             newArrow = Instantiate(arrowPrefab, arrowRest.position, arrowRest.rotation, arrowRest.transform);
             newArrow.GetComponent<Rigidbody>().isKinematic = true;
+            playerAnimator.SetBool("attack", false);
+            playerAnimator.SetBool("drawBow", true);
         };
 
         shootAction.action.canceled += context =>
@@ -40,6 +46,9 @@ public class Bow : MonoBehaviour
             {
                 newArrow.GetComponent<Rigidbody>().isKinematic = false;
                 newArrow.GetComponent<Rigidbody>().AddForce(arrowRest.forward * arrowForce);
+                playerAnimator.SetBool("drawBow", false);
+                playerAnimator.SetBool("attack", true);
+                player.GetComponent<PlayerStats>().UseStamina(10);
             }
         };
     }
