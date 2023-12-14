@@ -9,6 +9,7 @@ public class Bow : MonoBehaviour
     [SerializeField] Transform arrowRest;
     [SerializeField] float arrowForce = 2000f;
     [SerializeField] GameObject player;
+    [SerializeField] GameObject enemy;
     private GameObject newArrow;
     Animator playerAnimator;
 
@@ -51,5 +52,11 @@ public class Bow : MonoBehaviour
                 player.GetComponent<PlayerStats>().UseStamina(10);
             }
         };
+    }
+
+    private void Update()
+    {
+        transform.position = player.GetComponent<Transform>().position + new Vector3(0, 2, 0);
+        if (enemy != null) { transform.LookAt(enemy.transform.position); }
     }
 }

@@ -11,8 +11,8 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField] Slider healthSlider;
     [SerializeField] Slider staminaSlider;
+    [SerializeField] GameObject deathMessage;
 
-    [SerializeField] TextMeshProUGUI text;
 
     [SerializeField] float health;
     [SerializeField] float stamina;
@@ -26,6 +26,7 @@ public class PlayerStats : MonoBehaviour
         health = maxHealth;
         stamina = maxStamina;
         //StartCoroutine(Regenerate());
+        deathMessage.SetActive(false);
     }
 
     
@@ -38,11 +39,14 @@ public class PlayerStats : MonoBehaviour
         healthSlider.value = health;
         staminaSlider.value = stamina;
 
+        if (health <= 0) { deathMessage.SetActive(true); }
+
     }
 
     public void ReceiveDamage(float damage)
     {
         health -= damage;
+        GetComponent<AudioSource>().Play();
     }
 
     public void UseStamina(float cost)

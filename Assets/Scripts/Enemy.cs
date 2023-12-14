@@ -36,7 +36,11 @@ public class Enemy : MonoBehaviour
         if(collision.gameObject.layer == LayerMask.NameToLayer("Damaging"))
         {
             health -= 5;
-            if(health <= 0) { Destroy(gameObject); }
+            if(health <= 0)
+            {
+                GetComponent<AudioSource>().Play();
+                Destroy(gameObject);
+            }
         }
     }
 
